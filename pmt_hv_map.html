@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!-- Use python -m SimpleHTTPServer 8888 & -->
+<!-- Written by C.H. Faham -->
+<html lang="en"> 
+<head>
+<meta charset="utf-8">
+<title>D3 Page Template</title>
+<style type="text/css">
+
+/*  div.bar {
+        display: inline-block;
+        width: 20px;
+        height: 75px;
+        background-color: rgb(100,50,50);
+        margin-right:2px;
+    }
+*/
+
+
+
+</style>
+
+<div id="graphDiv"></div>
+
+<script type="text/javascript" src="d3/d3.v3.js"></script>
+</head>
+<body>
+    
+    <script type="text/javascript">
+    
+        //Width and height
+        var w = 1250; 
+        var h = 600;
+        hh = h - 20;
+        var barPad = 1;
+        var pmt_radius = 28.5;
+        var xOffset = 300;
+        var yOffset = -150;
+        var bArrayOffset = 600;
+        var yMirror = 120;
+         
+
+        var pmt_data = [ 
+        {"number":1, "status":1,"pos":[-120,207.85],"bias_V": -1147,"current_uA": -9.2},
+        {"number":2, "status":1,"pos":[-150,155.88],"bias_V": -1197,"current_uA": -9.2},
+        {"number":3, "status":1,"pos":[-180,103.92],"bias_V": -1197,"current_uA": -9.2},
+        {"number":4, "status":1,"pos":[-210,51.96],"bias_V": -1293,"current_uA": -9.2},
+        {"number":5, "status":0,"pos":[-90,155.88],"bias_V": 0,"current_uA": 0},
+        {"number":6, "status":1,"pos":[-120,103.92],"bias_V": -1284,"current_uA": -9.2},
+        {"number":7, "status":1,"pos":[-150,51.96],"bias_V": -1197,"current_uA": -9.2},
+        {"number":8, "status":1,"pos":[-60,103.92],"bias_V": -1179,"current_uA": -9.2},
+        {"number":9, "status":1,"pos":[-90,51.96],"bias_V": -1588,"current_uA": -9.2},
+        {"number":10, "status":1,"pos":[-30,51.96],"bias_V": -1144,"current_uA": -9.2},
+        {"number":11, "status":0,"pos":[-240,0],"bias_V": 0,"current_uA": 0},
+        {"number":12, "status":1,"pos":[-210,-51.96],"bias_V": -1200,"current_uA": -9.2},
+        {"number":13, "status":1,"pos":[-180,-103.92],"bias_V": -1161,"current_uA": -9.2},
+        {"number":14, "status":1,"pos":[-150,-155.88],"bias_V": -1247,"current_uA": -9.2},
+        {"number":15, "status":1,"pos":[-180,0],"bias_V": -1263,"current_uA": -9.2},
+        {"number":16, "status":1,"pos":[-150,-51.96],"bias_V": -1325,"current_uA": -9.2},
+        {"number":17, "status":1,"pos":[-120,-103.92],"bias_V": -1268,"current_uA": -9.2},
+        {"number":18, "status":1,"pos":[-120,0],"bias_V": -1253,"current_uA": -9.2},
+        {"number":19, "status":1,"pos":[-90,-51.96],"bias_V": -1338,"current_uA": -9.2},
+        {"number":20, "status":1,"pos":[-60,0],"bias_V": -1352,"current_uA": -9.2},
+        {"number":21, "status":1,"pos":[-120,-207.85],"bias_V": -1100,"current_uA": -9.2},
+        {"number":22, "status":1,"pos":[-60,-207.85],"bias_V": -1265,"current_uA": -9.2},
+        {"number":23, "status":1,"pos":[0,-207.85],"bias_V": -1150,"current_uA": -9.2},
+        {"number":24, "status":1,"pos":[60,-207.85],"bias_V": -1356,"current_uA": -9.2},
+        {"number":25, "status":1,"pos":[-90,-155.88],"bias_V": -1161,"current_uA": -9.2},
+        {"number":26, "status":2,"pos":[-30,-155.88],"bias_V": -1700,"current_uA": -20.1},
+        {"number":27, "status":1,"pos":[30,-155.88],"bias_V": -1284,"current_uA": -9.2},
+        {"number":28, "status":1,"pos":[-60,-103.92],"bias_V": -1300,"current_uA": -9.2},
+        {"number":29, "status":1,"pos":[0,-103.92],"bias_V": -1287,"current_uA": -9.2},
+        {"number":30, "status":1,"pos":[-30,-51.96],"bias_V": -1254,"current_uA": -9.2},
+        {"number":31, "status":1,"pos":[120,-207.85],"bias_V": -1172,"current_uA": -9.2},
+        {"number":32, "status":0,"pos":[150,-155.88],"bias_V": 0,"current_uA": 0},
+        {"number":33, "status":1,"pos":[180,-103.92],"bias_V": -1193,"current_uA": -9.2},
+        {"number":34, "status":1,"pos":[210,-51.96],"bias_V": -1171,"current_uA": -9.2},
+        {"number":35, "status":1,"pos":[90,-155.88],"bias_V": -1145,"current_uA": -9.2},
+        {"number":36, "status":1,"pos":[120,-103.92],"bias_V": -1244,"current_uA": -9.2},
+        {"number":37, "status":1,"pos":[150,-51.96],"bias_V": -1345,"current_uA": -9.2},
+        {"number":38, "status":1,"pos":[60,-103.92],"bias_V": -1282,"current_uA": -9.2},
+        {"number":39, "status":2,"pos":[90,-51.96],"bias_V": -1302,"current_uA": -9.2},
+        {"number":40, "status":1,"pos":[30,-51.96],"bias_V": -1295,"current_uA": -9.2},
+        {"number":41, "status":1,"pos":[240,0],"bias_V": -1155,"current_uA": -9.2},
+        {"number":42, "status":1,"pos":[210,51.96],"bias_V": -1085,"current_uA": -9.2},
+        {"number":43, "status":1,"pos":[180,103.92],"bias_V": -1318,"current_uA": -9.2},
+        {"number":44, "status":1,"pos":[150,155.88],"bias_V": -1146,"current_uA": -9.2},
+        {"number":45, "status":1,"pos":[180,0],"bias_V": -1289,"current_uA": -9.2},
+        {"number":46, "status":1,"pos":[150,51.96],"bias_V": -1151,"current_uA": -9.2},
+        {"number":47, "status":1,"pos":[120,103.92],"bias_V": -1176,"current_uA": -9.2},
+        {"number":48, "status":1,"pos":[120,0],"bias_V": -1157,"current_uA": -9.2},
+        {"number":49, "status":1,"pos":[90,51.96],"bias_V": -1165,"current_uA": -9.2},
+        {"number":50, "status":1,"pos":[60,0],"bias_V": -1251,"current_uA": -9.2},
+        {"number":51, "status":1,"pos":[120,207.85],"bias_V": -1515,"current_uA": -9.2},   
+        {"number":52, "status":1,"pos":[60,207.85],"bias_V": -1378,"current_uA": -9.2},
+        {"number":53, "status":1,"pos":[0,207.85],"bias_V": -1375,"current_uA": -9.2},
+        {"number":54, "status":1,"pos":[-60,207.85],"bias_V": -1114,"current_uA": -9.2},
+        {"number":55, "status":1,"pos":[90,155.88],"bias_V": -1263,"current_uA": -9.2},
+        {"number":56, "status":1,"pos":[30,155.88],"bias_V": -1120,"current_uA": -9.2},
+        {"number":57, "status":1,"pos":[-30,155.88],"bias_V": -1238,"current_uA": -9.2},
+        {"number":58, "status":1,"pos":[60,103.92],"bias_V": -1150,"current_uA": -9.2},
+        {"number":59, "status":1,"pos":[0,103.92],"bias_V": -1186,"current_uA": -9.2},
+        {"number":60, "status":1,"pos":[30,51.96],"bias_V": -1500,"current_uA": -9.2},
+        {"number":61, "status":1,"pos":[-120+bArrayOffset,207.85],"bias_V": -1405,"current_uA": -9.2},
+        {"number":62, "status":1,"pos":[-150+bArrayOffset,155.88],"bias_V": -1285, "current_uA": -9.2},
+        {"number":63, "status":1,"pos":[-180+bArrayOffset,103.92],"bias_V": -1109, "current_uA": -9.2},
+        {"number":64, "status":1,"pos":[-210+bArrayOffset,51.96],"bias_V": -1282, "current_uA": -9.2},
+        {"number":65, "status":1,"pos":[-90+bArrayOffset,155.88],"bias_V": -1604, "current_uA": -9.2},
+        {"number":66, "status":1,"pos":[-120+bArrayOffset,103.92],"bias_V": -1186, "current_uA": -9.2},
+        {"number":67, "status":1,"pos":[-150+bArrayOffset,51.96],"bias_V": -1289, "current_uA": -9.2},
+        {"number":68, "status":1,"pos":[-60+bArrayOffset,103.92],"bias_V": -1127, "current_uA": -9.2},
+        {"number":69, "status":1,"pos":[-90+bArrayOffset,51.96],"bias_V": -1153, "current_uA": -9.2},
+        {"number":70, "status":1,"pos":[-30+bArrayOffset,51.96],"bias_V": -1225, "current_uA": -9.2},
+        {"number":71, "status":1,"pos":[-240+bArrayOffset,0],"bias_V": -1402, "current_uA": -9.2},
+        {"number":72, "status":1,"pos":[-210+bArrayOffset,-51.96],"bias_V": -1125, "current_uA": -9.2},
+        {"number":73, "status":1,"pos":[-180+bArrayOffset,-103.92],"bias_V": -1192, "current_uA": -9.2},
+        {"number":74, "status":1,"pos":[-150+bArrayOffset,-155.88],"bias_V": -1117, "current_uA": -9.2},
+        {"number":75, "status":1,"pos":[-180+bArrayOffset,0],"bias_V": -1211, "current_uA": -9.2},
+        {"number":76, "status":1,"pos":[-150+bArrayOffset,-51.96],"bias_V": -1307, "current_uA": -9.2},
+        {"number":77, "status":1,"pos":[-120+bArrayOffset,-103.92],"bias_V": -1165, "current_uA": -9.2},
+        {"number":78, "status":1,"pos":[-120+bArrayOffset,0],"bias_V": -1137, "current_uA": -9.2},
+        {"number":79, "status":1,"pos":[-90+bArrayOffset,-51.96],"bias_V": -1366, "current_uA": -9.2},
+        {"number":80, "status":1,"pos":[-60+bArrayOffset,0],"bias_V": -1223, "current_uA": -9.2},
+        {"number":81, "status":1,"pos":[-120+bArrayOffset,-207.85],"bias_V": -1154, "current_uA": -9.2},
+        {"number":82, "status":1,"pos":[-60+bArrayOffset,-207.85],"bias_V": -1151, "current_uA": -9.2},
+        {"number":83, "status":1,"pos":[0+bArrayOffset,-207.85],"bias_V": -1116, "current_uA": -9.2},
+        {"number":84, "status":1,"pos":[60+bArrayOffset,-207.85],"bias_V": -1300, "current_uA": -9.2},
+        {"number":85, "status":1,"pos":[-90+bArrayOffset,-155.88],"bias_V": -1096, "current_uA": -9.2},
+        {"number":86, "status":1,"pos":[-30+bArrayOffset,-155.88],"bias_V": -1330, "current_uA": -9.2},
+        {"number":87, "status":1,"pos":[30+bArrayOffset,-155.88],"bias_V": -1187, "current_uA": -9.2},
+        {"number":88, "status":1,"pos":[-60+bArrayOffset,-103.92],"bias_V": -1166, "current_uA": -9.2},
+        {"number":89, "status":1,"pos":[0+bArrayOffset,-103.92],"bias_V": -1219, "current_uA": -9.2},
+        {"number":90, "status":1,"pos":[-30+bArrayOffset,-51.96],"bias_V": -1268, "current_uA": -9.2},
+        {"number":91, "status":1,"pos":[120+bArrayOffset,-207.85],"bias_V": -1124, "current_uA": -9.2},
+        {"number":92, "status":1,"pos":[150+bArrayOffset,-155.88],"bias_V": -1244, "current_uA": -9.2},
+        {"number":93, "status":0,"pos":[180+bArrayOffset,-103.92],"bias_V": 0, "current_uA": 0},
+        {"number":94, "status":1,"pos":[210+bArrayOffset,-51.96],"bias_V": -1314, "current_uA": -9.2},
+        {"number":95, "status":1,"pos":[90+bArrayOffset,-155.88],"bias_V": -1308, "current_uA": -9.2},
+        {"number":96, "status":1,"pos":[120+bArrayOffset,-103.92],"bias_V": -1469, "current_uA": -9.2},
+        {"number":97, "status":1,"pos":[150+bArrayOffset,-51.96],"bias_V": -1144, "current_uA": -9.2},
+        {"number":98, "status":1,"pos":[60+bArrayOffset,-103.92],"bias_V": -1118, "current_uA": -9.2},
+        {"number":99, "status":1,"pos":[90+bArrayOffset,-51.96],"bias_V": -1201, "current_uA": -9.2},
+        {"number":100, "status":1,"pos":[30+bArrayOffset,-51.96],"bias_V": -1186, "current_uA": -9.2},
+        {"number":101, "status":1,"pos":[240+bArrayOffset,0],"bias_V": -1138, "current_uA": -9.2},
+        {"number":102, "status":1,"pos":[210+bArrayOffset,51.96],"bias_V": -1049, "current_uA": -9.2},
+        {"number":103, "status":1,"pos":[180+bArrayOffset,103.92],"bias_V": -1123, "current_uA": -9.2},
+        {"number":104, "status":1,"pos":[150+bArrayOffset,155.88],"bias_V": -1168, "current_uA": -9.2},
+        {"number":105, "status":1,"pos":[180+bArrayOffset,0],"bias_V": -1425, "current_uA": -9.2},
+        {"number":106, "status":1,"pos":[150+bArrayOffset,51.96],"bias_V": -1245, "current_uA": -9.2},
+        {"number":107, "status":1,"pos":[120+bArrayOffset,103.92],"bias_V": -1307, "current_uA": -9.2},
+        {"number":108, "status":1,"pos":[120+bArrayOffset,0],"bias_V": -1316, "current_uA": -9.2},
+        {"number":109, "status":1,"pos":[90+bArrayOffset,51.96],"bias_V": -1182, "current_uA": -9.2},
+        {"number":110, "status":1,"pos":[60+bArrayOffset,0],"bias_V": -1249, "current_uA": -9.2},
+        {"number":111, "status":1,"pos":[120+bArrayOffset,207.85],"bias_V": -1132, "current_uA": -9.2},
+        {"number":112, "status":1,"pos":[60+bArrayOffset,207.85],"bias_V": -1229, "current_uA": -9.2},
+        {"number":113, "status":1,"pos":[0+bArrayOffset,207.85],"bias_V": -1335, "current_uA": -9.2},
+        {"number":114, "status":1,"pos":[-60+bArrayOffset,207.85],"bias_V": -1243, "current_uA": -9.2},
+        {"number":115, "status":1,"pos":[90+bArrayOffset,155.88],"bias_V": -1354, "current_uA": -9.2},
+        {"number":116, "status":1,"pos":[30+bArrayOffset,155.88],"bias_V": -1152, "current_uA": -9.2},
+        {"number":117, "status":1,"pos":[-30+bArrayOffset,155.88],"bias_V": -1328, "current_uA": -9.2},
+        {"number":118, "status":1,"pos":[60+bArrayOffset,103.92],"bias_V": -1166, "current_uA": -9.2},
+        {"number":119, "status":1,"pos":[0+bArrayOffset,103.92],"bias_V": -1160, "current_uA": -9.2},
+        {"number":120, "status":1,"pos":[30+bArrayOffset,51.96],"bias_V": -1243, "current_uA": -9.2},
+        {"number":121, "status":1,"pos":[0,0],"bias_V": -1207, "current_uA": -9.2},
+        {"number":122, "status":1,"pos":[0+bArrayOffset,0],"bias_V": -1357,"current_uA": -9.2}
+        ];
+        
+        
+        //Create SVG element
+		var svg = d3.select("#graphDiv")
+					.append("svg")
+					.attr("width", w)
+					.attr("height", h);
+
+        // First make axis lines
+        var axislines = [
+        [xOffset,xOffset,0,50],
+        [xOffset+bArrayOffset,xOffset+bArrayOffset,0,50],
+        [240+xOffset,240+xOffset+70,yMirror-yOffset,yMirror-yOffset],
+        [240+xOffset+bArrayOffset,240+xOffset+bArrayOffset+70,yMirror-yOffset,yMirror-yOffset]
+        ];
+        
+        lines = svg.selectAll("line")
+                    .data(axislines)
+                    .enter()
+                    .append("line")
+                    .attr({
+                        x1: function(d) {return d[0]},
+                        x2: function(d) {return d[1]},
+                        y1: function(d) {return d[2]},
+                        y2: function(d) {return d[3]},
+                    });
+        lines.attr("stroke","black")
+        
+    var node = svg.selectAll(".node")
+            .data(pmt_data)
+            .attr("class", "node")
+            .enter().append("g")
+
+    var fill_area_scale = d3.scale.linear();
+    fill_area_scale.domain([0,-1700]);
+    fill_area_scale.range([0,1]);
+    
+    function calcHeight(bias_V) {
+        return 2*pmt_radius*fill_area_scale(bias_V) 
+        // this needs to be changed to analytical formula for linearity in area, not height
+    }
+    
+    function calcHeightOffset(bias_V) {
+        return 2*pmt_radius*(1-fill_area_scale(bias_V)) 
+        // this needs to be changed to analytical formula for linearity in area, not height
+    }
+    
+    // Can delete for hit map
+    var clipz = node.append("clipPath")
+                .attr('id', function(d) { return "clip" + d.number })
+                .append('rect')
+                .attr("x", function(d){ return d.pos[0]+xOffset-pmt_radius;})
+                .attr("width", 2*pmt_radius)
+                .attr("y", function(d) {return (yMirror-(d.pos[1]+yOffset)-pmt_radius + calcHeightOffset(d.bias_V));})
+                .attr("height", function(d) {return calcHeight(d.bias_V);});
+
+    var circles = node.append("circle")
+                .attr({
+                    cx: function(d) {return d.pos[0]+xOffset},
+                    cy: function(d) {return yMirror-(d.pos[1]+yOffset)},
+                    r: pmt_radius
+                })
+                .attr("fill","white")
+                .attr("stroke","black")
+                .append("svg:title")
+               .text(function(d,i) { return i+1; });
+
+    // This holds the hit map color! Redundant with above circle. Only useful for clipper path
+    var circles_fg = node.append("circle")
+                .attr({
+                    cx: function(d) {return d.pos[0]+xOffset},
+                    cy: function(d) {return yMirror-(d.pos[1]+yOffset)},
+                    r: pmt_radius
+                })
+                .attr("clip-path", function(d) { return "url(#clip" + d.number + ")"})
+                .attr("stroke","black")
+                .attr("fill",function(d) {
+                    if (d.status == 1) {return "DodgerBlue"}
+                    else if (d.status == 2) {return "red "}
+                    else if (d.status == 0) {return "white"}
+                    });
+                // .append("svg:title")
+               // .text(function(d,i) { return i+1; });     
+               
+               
+   node.append("text")
+   .text(function(d) { return d.bias_V + " V" })
+   .attr("x",function(d) {return d.pos[0]+xOffset;})
+   .attr("y",function(d) {return yMirror-(d.pos[1]+yOffset)+2;})
+   .style("font-size",13)
+   .style("text-anchor", "middle");
+   
+   node.append("text")
+   .text(function(d) { return d.current_uA + " µA" })
+   .attr("x",function(d) {return d.pos[0]+xOffset;})
+   .attr("y",function(d) {return yMirror-(d.pos[1]+yOffset)+12;})
+   .style("font-size",11)
+   .style("text-anchor", "middle");
+
+
+                
+    </script>
+</body>
+</html>
